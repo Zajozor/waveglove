@@ -1,13 +1,9 @@
+import socket
 from enum import Enum
 
 import h5py
-import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 from sklearn.model_selection import train_test_split
-import socket
-from sklearn.preprocessing import normalize
-
 
 DATA_ROOTS = {
     'zor-empowered.local': '/Users/zajozor/Code/awesome-har-datasets/data',
@@ -43,28 +39,10 @@ def split_data(x, y, nan_to_num=True):
     return train_test_split(x, y, test_size=0.2, random_state=42)
 
 
-def create_confusion_matrix(class_count, y_hat, y):
-    matrix = np.zeros((class_count, class_count), dtype=np.int)
-    for i in range(y_hat.shape[0]):
-        matrix[y[i]][y_hat[i]] += 1
-    return matrix
+def load_split_dataset(dataset):
+    with Dataset.load(dataset) as h5f:
+        x = np.array(h5f['x'])
+        y = np.array(h5f['y']['class'])
+        class_count = len(h5f['y'].attrs['classes'])
 
-
-def plot_confusion_matrix(matrix, annot=None, title=None, ax=None, norm_row=True, fmt='d',
-                          xlabel=None, ylabel=None):
-    if norm_row:
-        matrix = normalize(matrix, axis=1, norm='l1')
-        fmt = '.2f'
-
-    if annot is None:
-        annot = [[f'{item:.2f}'.rstrip('0.') for item in row] for row in matrix]
-        fmt = ''
-
-    if not ax:
-        ax = plt.axes()
-    if title:
-        ax.set_title(title)
-
-    sns.heatmap(matrix, ax=ax, annot=annot, fmt=fmt, cmap='Blues')
-    ax.set_xlabel('Prediction' if xlabel is None else xlabel)
-    ax.set_ylabel('Truth' if ylabel is None else ylabel)
+    return split_data(x, y), class_count
