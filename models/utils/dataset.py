@@ -1,15 +1,10 @@
-import socket
 from enum import Enum
 
 import h5py
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-DATA_ROOTS = {
-    'zor-empowered.local': '/Users/zajozor/Code/awesome-har-datasets/data',
-    'naiveneuron-s1': '/ext/zajo/data',
-}
-DATA_ROOT = DATA_ROOTS[socket.gethostname()]
+from models.utils.common import DATA_ROOT
 
 
 class Dataset(Enum):
@@ -17,11 +12,11 @@ class Dataset(Enum):
     WAVEGLOVE_SINGLE = 'waveglove_single'
     UWAVE = 'uwave'
     OPPORTUNITY = 'opportunity'
-    MHEALTH = 'mhealth'
+    # MHEALTH = 'mhealth'
     SKODA = 'skoda'
     PAMAP2 = 'pamap2'
-    USCHAD = 'uschad'
-    WISDM = 'wisdm'
+    # USCHAD = 'uschad'
+    # WISDM = 'wisdm'
 
     @staticmethod
     def get_path(dataset):

@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 def create_results(model, test_f,
                    x_train, x_test, y_train, y_test, class_count,
                    dataset):
+    from models.utils.common import writer
+
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 7))
 
     # To validate we can overfit
@@ -21,3 +23,9 @@ def create_results(model, test_f,
     print(f'Accuracy: {acc}, Recall: {recall}, F1: {f1}')
 
     fig.show()
+    writer.add_scalar('accuracy', acc)
+    writer.add_scalar('recall', recall)
+    writer.add_scalar('f1', f1)
+    writer.add_figure('confusion_matrix', fig)
+
+

@@ -1,10 +1,9 @@
 import numpy as np
-from matplotlib import pyplot as plt
+import tqdm
 from sklearn import tree
 from sklearn.ensemble import BaggingClassifier
 
 from models import features as fs
-from models import utils
 
 
 def feature_extraction(xs):
@@ -12,11 +11,11 @@ def feature_extraction(xs):
     used_features = [fs.channel_correlation, fs.channel_mean]
     x_features = []
     count = 0
-    for sample in xs:
+    print('Extracting features')
+
+    for sample in tqdm.tqdm(xs):
         x_features.append(np.hstack([feature(sample) for feature in used_features]))
         count += 1
-        if count % 100 == 0:
-            print('Extracting sample', count)
 
     return np.array(x_features)
 
