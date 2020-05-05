@@ -20,8 +20,13 @@ TENSORBOARD_ROOT = TENSORBOARD_ROOTS[hostname]
 writer = None
 
 
+def get_formatted_datetime():
+    return datetime.datetime.now().strftime("%b%d_%H:%M:%S")
+
+
 def set_writer(model_name, dataset):
     global writer
     writer = SummaryWriter(f'{TENSORBOARD_ROOT}/'
-                           f'{datetime.datetime.now().strftime("%b%d_%H:%M:%S")}-'
+                           f'{get_formatted_datetime()}-'
                            f'{model_name}-{dataset.value}')
+

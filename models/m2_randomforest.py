@@ -5,6 +5,9 @@ from sklearn.ensemble import BaggingClassifier
 
 from models import features as fs
 
+# Bagging and decision tree as in
+# https://github.com/arturjordao/WearableSensorData/blob/master/Kimetal_2012.py
+
 
 def feature_extraction(xs):
     # Extracts the features, as mentioned by Catal et al. 2015

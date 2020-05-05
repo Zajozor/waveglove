@@ -12,7 +12,7 @@ class Dataset(Enum):
     WAVEGLOVE_SINGLE = 'waveglove_single'
     UWAVE = 'uwave'
     OPPORTUNITY = 'opportunity'
-    # MHEALTH = 'mhealth'
+    MHEALTH = 'mhealth'
     SKODA = 'skoda'
     PAMAP2 = 'pamap2'
     # USCHAD = 'uschad'
