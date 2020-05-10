@@ -1,3 +1,4 @@
+import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
 from sklearn.preprocessing import normalize
@@ -21,3 +22,17 @@ def plot_confusion_matrix(matrix, annot=None, title=None, ax=None, norm_row=True
     sns.heatmap(matrix, ax=ax, annot=annot, fmt=fmt, cmap='Blues')
     ax.set_xlabel('Prediction' if xlabel is None else xlabel)
     ax.set_ylabel('Truth' if ylabel is None else ylabel)
+
+
+def plot_class_histogram(data, ax=None,
+                         title=None, xlabel=None, ylabel=None):
+    if title:
+        ax.set_title(title)
+    if not ax:
+        ax = plt.axes()
+
+    bins = np.unique(data).shape[0]
+    sns.distplot(data, bins, ax=ax)
+
+    ax.set_xlabel('Class' if xlabel is None else xlabel)
+    ax.set_ylabel('Count' if ylabel is None else ylabel)

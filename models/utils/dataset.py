@@ -12,11 +12,9 @@ class Dataset(Enum):
     WAVEGLOVE_SINGLE = 'waveglove_single'
     UWAVE = 'uwave'
     OPPORTUNITY = 'opportunity'
-    MHEALTH = 'mhealth'
-    SKODA = 'skoda'
     PAMAP2 = 'pamap2'
-    # USCHAD = 'uschad'
-    # WISDM = 'wisdm'
+    SKODA = 'skoda'
+    MHEALTH = 'mhealth'
 
     @staticmethod
     def get_path(dataset):

@@ -1,11 +1,13 @@
-from models.utils import metrics as u_metrics, plot as u_plot
 import matplotlib.pyplot as plt
+
+from models.utils import metrics as u_metrics, plot as u_plot
+from models.utils.common import get_logger
 
 
 def create_results(model, test_f,
                    x_train, x_test, y_train, y_test, class_count,
                    dataset, model_name):
-    from models.utils.common import writer
+    logger = get_logger()
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 7))
 
@@ -21,12 +23,12 @@ def create_results(model, test_f,
 
     fig.suptitle(f'Model: {model_name}, Dataset: {dataset.value}', fontsize=16)
     fig.subplots_adjust(top=.9)
-    writer.add_figure('confusion_matrix', fig)
+    logger.experiment.add_figure('confusion_matrix', fig)
 
     acc, recall, f1 = u_metrics.get_metrics(y_hat, y_test)
-    writer.add_scalar('accuracy', acc)
-    writer.add_scalar('recall', recall)
-    writer.add_scalar('f1', f1)
+    logger.log_metrics({
+        'perf/accuracy': acc, 'perf/recall': recall, 'perf/f1': f1
+    })
     print(f'Accuracy: {acc}, Recall: {recall}, F1: {f1}')
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 7))
@@ -34,6 +36,6 @@ def create_results(model, test_f,
     u_plot.plot_class_histogram(y_test, ax=ax2, title='Class distribution on test')
     fig.suptitle(f'Model: {model_name}, dataset: {dataset.value}', fontsize=16)
     fig.subplots_adjust(top=.9)
-    writer.add_figure('y_dist', fig)
+    logger.experiment.add_figure('y_dist', fig)
 
-    writer.flush()
+    logger.save()

@@ -1,6 +1,8 @@
 import socket
 import datetime
+from typing import List, Union
 
+from pytorch_lightning.loggers import TensorBoardLogger
 from torch.utils.tensorboard import SummaryWriter
 
 hostname = socket.gethostname()
@@ -17,16 +19,22 @@ TENSORBOARD_ROOTS = {
 }
 TENSORBOARD_ROOT = TENSORBOARD_ROOTS[hostname]
 
-writer = None
+# Wrapped in a list to make "referencable", would be nicer in a class
+logger: List[Union[None, TensorBoardLogger]] = [None]
 
 
 def get_formatted_datetime():
-    return datetime.datetime.now().strftime("%b%d_%H:%M:%S")
+    return datetime.datetime.now().strftime("%b%d-%H:%M:%S")
 
 
-def set_writer(model_name, dataset):
-    global writer
-    writer = SummaryWriter(f'{TENSORBOARD_ROOT}/'
-                           f'{get_formatted_datetime()}-'
-                           f'{model_name}-{dataset.value}')
+def set_logger(model_name, dataset):
+    global logger
+    logger[0] = TensorBoardLogger(TENSORBOARD_ROOT,
+                                  name=f'{model_name}-{dataset.value}',
+                                  version=get_formatted_datetime())
 
+
+def get_logger():
+    if logger[0] is None:
+        raise ValueError('Writer needs to be set first!')
+    return logger[0]

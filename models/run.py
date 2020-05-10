@@ -1,27 +1,30 @@
-import models.m1_baseline as m1
-import models.m2_randomforest as m2
-import models.m3_linear as m3
-import models.m4_cnn as m4
-from models.utils import dataset as u_dataset, test as u_test
-from models.utils.dataset import Dataset
-from models.utils.common import set_writer
 import torch
+
+from models import m1_baseline, m2_randomforest, m3_linear, m4_cnn, m5_lstm
+from models.utils import dataset as u_dataset, evaluate as u_test
+from models.utils.common import set_logger
+from models.utils.dataset import Dataset
+from models.utils.hparams import iter_hparams
 
 torch.manual_seed(42)
 
 
-def run(model_choice, dataset=Dataset.WAVEGLOVE_MULTI, model_name='Some model'):
+def run(model_choice, ds=Dataset.WAVEGLOVE_MULTI,
+        model_name='Some model', hp=None):
+    if hp is None:
+        hp = {}
+
     (x_train, x_test, y_train, y_test), class_count = \
-        u_dataset.load_split_dataset(dataset)
+        u_dataset.load_split_dataset(ds)
 
     x_train, x_test = model_choice.feature_extraction(x_train), \
         model_choice.feature_extraction(x_test)
 
-    model = model_choice.train(x_train, y_train, class_count)
+    m = model_choice.train(x_train, y_train, class_count, **hp)
 
-    u_test.create_results(model, model_choice.test,
+    u_test.create_results(m, model_choice.test,
                           x_train, x_test, y_train, y_test, class_count,
-                          dataset, model_name)
+                          ds, model_name)
 
 
 if __name__ == '__main__':
@@ -35,15 +38,42 @@ if __name__ == '__main__':
         Dataset.SKODA,
         Dataset.MHEALTH,
     ]:
-        for model, name in [
+        for model, name, hparams_sweep in [
             # (m1, 'baseline'),
             # (m2, 'randomforest'),
-            (m3, 'basenn'),
-            (m4, 'basiccnn'),
+            (m3_linear, 'nn1', {
+                'l1': [64],#, 64, 128, 256, 512],
+                'l2': [128],#, 64, 128, 256, 512],
+                'lr': [0.001],#, 0.01, 0.001],
+                'folds': [2],
+            }),
+            # (m4_cnn, 'cnn1', {
+            #     'filters1': [9, 18, 36],
+            #     'kernel_width1': [13, 26],
+            #     'filters2': [9, 18, 36],
+            #     'kernel_width2': [4, 8, 12],
+            #     'filters3': [9, 18, 36],
+            #     'kernel_width3': [4, 8, 12],
+            #     'lr': [0.1, 0.01, 0.001],
+            # }),
+            (m4_cnn, 'cnn1', {
+                'filters1': [18],
+                'kernel_width1': [13],
+                'filters2': [36],
+                'kernel_width2': [7],
+                'filters3': [24],
+                'kernel_width3': [7],
+                'lr': [0.001],
+                'folds': [2],
+            })
         ]:
-            print('Running', name, 'on', dataset.value)
-            set_writer(name, dataset)
-            run(model, dataset, name)
+            for hparams in iter_hparams(hparams_sweep):
+                print('Running', name, 'on', dataset.value, 'with', hparams)
+                set_logger(name, dataset)
+                run(model, dataset, name, hparams)
 
 # TODO add confidence intervals to runs
 # TODO labels k zvysnym datasetom s wsd
+
+# Just so these are not code-styled away
+t = [m1_baseline, m2_randomforest, m3_linear, m4_cnn, m5_lstm]

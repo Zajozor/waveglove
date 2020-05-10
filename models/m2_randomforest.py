@@ -23,7 +23,7 @@ def feature_extraction(xs):
     return np.array(x_features)
 
 
-def train(x_train, y_train, *args, **kwargs):
+def train(x_train, y_train, **kwargs):
     classifier = BaggingClassifier(tree.DecisionTreeClassifier(),
                                    n_estimators=100,
                                    max_samples=0.5, max_features=0.5,
