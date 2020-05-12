@@ -23,7 +23,6 @@ class CNNModel(CommonModel):
 
         self.final = torch.nn.Linear(hparams['filters3'] * width_after3 * (hparams['channels'] - 1),
                                      hparams['class_count'])
-        self.final_softmax = torch.nn.Softmax(dim=1)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = x.view((x.shape[0], 1, x.shape[1], x.shape[2]))
@@ -31,7 +30,7 @@ class CNNModel(CommonModel):
         x = torch.relu(self.c2(x))
         x = self.mp3(torch.relu(self.c3(x)))
 
-        return self.final_softmax(self.final(x.flatten(start_dim=1)))
+        return self.final(x.flatten(start_dim=1))
 
 
 def feature_extraction(xs):
