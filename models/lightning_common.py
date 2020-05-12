@@ -4,15 +4,14 @@ import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import EarlyStopping
 from sklearn.metrics import f1_score
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, train_test_split
 from torch.nn import functional as F
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader, TensorDataset
 
-from models.imbalanced import ImbalancedDatasetSampler
 from models.utils.common import get_logger
 
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 
 
 class CommonModel(pl.LightningModule):
@@ -29,41 +28,23 @@ class CommonModel(pl.LightningModule):
               f'Data shape: '
               f'x-train {xst.shape} y-train {yst.shape} '
               f'x-valid {xsv.shape} y-valid {ysv.shape}')
-        import numpy as np
-        self.counts = np.array([0] * self.hparams['class_count'])
 
     def configure_optimizers(self) -> Optimizer:
         return torch.optim.Adam(self.parameters(), lr=self.hparams['lr'])
 
     def train_dataloader(self) -> DataLoader:
         ds = TensorDataset(self._xst, self._yst)
-        return DataLoader(ds,
-                          batch_size=BATCH_SIZE,
-                          sampler=ImbalancedDatasetSampler(
-                              dataset=ds,
-                              callback_get_label=lambda _, i: int(self._yst[i])
-                          ))
+        return DataLoader(ds, batch_size=BATCH_SIZE)
 
     def val_dataloader(self):
         ds = TensorDataset(self._xsv, self._ysv)
-        return DataLoader(ds,
-                          batch_size=BATCH_SIZE,
-                          sampler=ImbalancedDatasetSampler(
-                              dataset=ds,
-                              callback_get_label=lambda _, i: int(self._ysv[i])
-                          ))
+        return DataLoader(ds, batch_size=BATCH_SIZE)
 
     def training_step(self, batch, batch_idx):
         x, y = batch
-        import numpy as np
-        self.counts += np.histogram(y.cpu().numpy(), bins=self.hparams['class_count'])[0]
         y_hat = self(x)
         loss = F.cross_entropy(y_hat, y)
         return {'loss': loss, 'log': {'train_loss': loss}}
-
-    # def training_epoch_end(self, outputs):
-    #     print('training epoch classes: ', self.counts)
-    #     return {}
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
@@ -72,20 +53,23 @@ class CommonModel(pl.LightningModule):
 
     def validation_epoch_end(self, outputs):
         avg_loss = torch.stack([x['val_loss'] for x in outputs]).mean()
-        return {'val_loss': avg_loss, 'log': {'val_loss': avg_loss}}
+        return {'val_loss': avg_loss, 'progress_bar': {'val_loss': avg_loss}, 'log': {'val_loss': avg_loss}}
 
     def forward(self, *args, **kwargs):
         raise NotImplementedError('This class should be subclassed, not used directly.')
 
 
-def common_train(x_train, y_train, model_class, model_hparams, folds):
-    skf = StratifiedKFold(n_splits=folds, shuffle=True, random_state=42)
+def common_train(x_train, y_train, model_class, model_hparams, folds=None):
+    if folds is None:
+        folds = [train_test_split(np.arange(x_train.shape[0]), test_size=0.15, random_state=42)]
+    else:
+        folds = StratifiedKFold(n_splits=folds, shuffle=True, random_state=42).split(x_train, y_train)
+
     best_model, best_f1 = None, 0
     f1_scores = []
-    for train_idx, valid_idx in skf.split(x_train, y_train):
+    for train_idx, valid_idx in folds:
         xst, yst = x_train[train_idx], y_train[train_idx]
         xsv, ysv = x_train[valid_idx], y_train[valid_idx]
-        # print('test classes: ', np.histogram(yst, bins=class_count)[0], 'valid classes: ', np.histogram(ysv, bins=class_count)[0])
         model = model_class(
             model_hparams,
             xst, yst, xsv, ysv
@@ -94,9 +78,9 @@ def common_train(x_train, y_train, model_class, model_hparams, folds):
                           logger=get_logger(),
                           early_stop_callback=EarlyStopping(
                               monitor='val_loss',
-                              min_delta=0.001,
+                              min_delta=0,
                               patience=10,
-                              verbose=False,
+                              verbose=True,
                               mode='min'
                           ),
                           min_epochs=10)
