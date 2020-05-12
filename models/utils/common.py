@@ -43,7 +43,7 @@ def set_logger(model_name, dataset, hp_id='', hparams=None):
     logger[0] = TensorBoardLogger(TENSORBOARD_ROOT,
                                   name=f'{model_name}-{dataset.value}',
                                   version=f'{hp_id}-{dt}')
-    add_log(model_name, f'[{dt}] id{hp_id} on {dataset.value} with {hparams}: ', newline=False)
+    add_log(model_name, f'[{dt}] {model_name}/{hp_id:3} on {dataset.value:16} with {hparams}: ', newline=False)
 
 
 def get_logger():

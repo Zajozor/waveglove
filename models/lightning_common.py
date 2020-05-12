@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from models.utils.common import get_logger
 
-BATCH_SIZE = 32
+BATCH_SIZE = 128
 
 
 class CommonModel(pl.LightningModule):

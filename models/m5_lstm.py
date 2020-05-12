@@ -16,13 +16,18 @@ class LSTMModel(CommonModel):
         self.n_classes = hparams['class_count']
         self.n_channels = hparams['channels']
 
+        self.pre_fc = torch.nn.Linear(hparams['temporal_length'], 60)
         self.lstm = torch.nn.LSTM(self.n_channels, self.n_hidden, self.n_layers, dropout=self.drop_prob,
                                   batch_first=True)
         self.fc = torch.nn.Linear(self.n_hidden, self.n_classes)
         self.dropout = torch.nn.Dropout(self.drop_prob)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x[:, :50, :]
+        x = x.permute(0, 2, 1)
+        x = self.pre_fc(x)
+        x = torch.tanh(x)
+        x = x.permute(0, 2, 1)
+
         x, _ = self.lstm(x)
         x = x[:, -1]  # Take last output
         x = self.fc(x)
@@ -39,6 +44,7 @@ def train(x_train, y_train, class_count, *args, **kwargs):
                             'layer_count': kwargs['layer_count'],
                             'hidden_size': kwargs['hidden_size'],
                             'drop_prob': kwargs['drop_prob'],
+                            'temporal_length': x_train.shape[1],
 
                             'lr': kwargs['lr'],
                             'class_count': class_count,

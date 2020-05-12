@@ -10,7 +10,7 @@ def create_results(model, test_f,
                    plot_y_dist=False):
     logger = get_logger()
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 7))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(1.6 * class_count, 0.8 * class_count))
 
     # First re-test on the training data
     y_hat_train = test_f(model, x_train)
