@@ -1,6 +1,6 @@
 import torch
 
-from models import m1_baseline, m2_randomforest, m3_linear, m4_cnn, m5_lstm
+from models import m1_baseline, m2_randomforest, m3_linear, m4_cnn, m5_lstm, m6_transformer
 from models.utils import dataset as u_dataset, evaluate as u_test
 from models.utils.common import set_logger
 from models.utils.dataset import Dataset
@@ -14,11 +14,10 @@ def run(model_choice, ds=Dataset.WAVEGLOVE_MULTI,
     if hp is None:
         hp = {}
 
-    (x_train, x_test, y_train, y_test), class_count = \
-        u_dataset.load_split_dataset(ds)
+    (x_train, x_test, y_train, y_test), class_count = u_dataset.load_split_dataset(ds)
 
-    x_train, x_test = model_choice.feature_extraction(x_train), \
-        model_choice.feature_extraction(x_test)
+    x_train, x_test = \
+        model_choice.feature_extraction(x_train), model_choice.feature_extraction(x_test)
 
     m = model_choice.train(x_train, y_train, class_count, **hp)
 
@@ -67,13 +66,12 @@ if __name__ == '__main__':
                 'folds': [2],
             })
         ]:
-            for hparams in iter_hparams(hparams_sweep):
-                print('Running', name, 'on', dataset.value, 'with', hparams)
-                set_logger(name, dataset)
+            for hp_id, hparams in enumerate(iter_hparams(hparams_sweep)):
+                set_logger(name, dataset, hp_id, hparams)
                 run(model, dataset, name, hparams)
 
 # TODO add confidence intervals to runs
 # TODO labels k zvysnym datasetom s wsd
 
 # Just so these are not code-styled away
-t = [m1_baseline, m2_randomforest, m3_linear, m4_cnn, m5_lstm]
+t = [m1_baseline, m2_randomforest, m3_linear, m4_cnn, m5_lstm, m6_transformer]
