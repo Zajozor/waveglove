@@ -20,13 +20,18 @@ TENSORBOARD_ROOT = TENSORBOARD_ROOTS[hostname]
 
 RUN_LOG_FILE = 'hparams-{model}.log'
 
+_buffer = ''
+
 
 def add_log(model, line, newline=True):
+    global _buffer
     print(f'[{model}]', line)
-    with open(RUN_LOG_FILE.format(model=model), 'a') as f:
-        f.write(line)
-        if newline:
+    _buffer += line
+    if newline:
+        with open(RUN_LOG_FILE.format(model=model), 'a') as f:
+            f.write(_buffer)
             f.write('\n')
+        _buffer = ''
 
 
 # Wrapped in a list to make "referencable", would be nicer in a class
@@ -43,7 +48,7 @@ def set_logger(model_name, dataset, hp_id='', hparams=None):
     logger[0] = TensorBoardLogger(TENSORBOARD_ROOT,
                                   name=f'{model_name}-{dataset.value}',
                                   version=f'{hp_id}-{dt}')
-    add_log(model_name, f'[{dt}] {model_name}/{hp_id:3} on {dataset.value:16} with {hparams}: ', newline=False)
+    add_log(model_name, f'[{dt}] {model_name:12}/{hp_id:3} on {dataset.value:16} with {hparams}: ', newline=False)
 
 
 def get_logger():
