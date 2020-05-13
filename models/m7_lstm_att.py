@@ -1,6 +1,7 @@
 import torch
 
 from models.lightning_common import CommonModel, common_test, common_train
+from torch.nn import functional as F
 
 
 # Architecture based on
@@ -27,6 +28,7 @@ class LSTMModel(CommonModel):
 
         # Dot product attention
         attention = torch.bmm(x, x[:, -1].unsqueeze(2))
+        # attention = F.softmax(attention, dim=1)
         x = torch.bmm(attention.permute(0, 2, 1), x).squeeze(1)
 
         x = self.fc(x)

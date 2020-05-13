@@ -18,7 +18,7 @@ def create_results(model, test_f,
     u_plot.plot_confusion_matrix(cm_train, title=f'Training', ax=ax1)
 
     acc_train, recall_train, f1_train = u_metrics.get_metrics(y_hat_train, y_train)
-    add_log(model_name, f'| TAcc: {acc_train:.3f} TRec: {recall_train:.3f} TF1: {f1_train:.3f} | ', newline=False)
+    add_log(model_name, f'TAcc: {acc_train:.3f} | TRec: {recall_train:.3f} | TF1: {f1_train:.3f} || ', newline=False)
 
     # Actual prediction results
     y_hat = test_f(model, x_test)
@@ -26,7 +26,7 @@ def create_results(model, test_f,
     u_plot.plot_confusion_matrix(cm, title=f'Test', ax=ax2)
 
     acc, recall, f1 = u_metrics.get_metrics(y_hat, y_test)
-    add_log(model_name, f'Acc: {acc:.3f} Rec: {recall:.3f} F1: {f1:.3f}')
+    add_log(model_name, f'Acc: {acc:.3f} | Rec: {recall:.3f} | F1: {f1:.3f}')
 
     fig.suptitle(f'Model: {model_name}, Dataset: {dataset.value}', fontsize=16)
     fig.subplots_adjust(top=.9)

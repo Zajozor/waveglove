@@ -42,13 +42,17 @@ def get_formatted_datetime():
     return datetime.datetime.now().strftime("%b%d-%H:%M:%S")
 
 
-def set_logger(model_name, dataset, hp_id='', hparams=None):
+def set_logger(model_name, dataset, hp_id='', hparams=None, prefold=None):
     global logger
+    if prefold is None:
+        prefold = ''
+
     dt = get_formatted_datetime()
     logger[0] = TensorBoardLogger(TENSORBOARD_ROOT,
                                   name=f'{model_name}-{dataset.value}',
-                                  version=f'{hp_id}-{dt}')
-    add_log(model_name, f'[{dt}] {model_name:12}/{hp_id:3} on {dataset.value:16} with {hparams}: ', newline=False)
+                                  version=f'{hp_id}-{prefold}-{dt}')
+    add_log(model_name, f'{dt} | {model_name:12} | {hp_id:3} | {prefold:2} | {dataset.value:30} | {hparams} || ',
+            newline=False)
 
 
 def get_logger():

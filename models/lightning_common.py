@@ -83,7 +83,7 @@ def common_train(x_train, y_train, model_class, model_hparams, folds=None):
                               verbose=True,
                               mode='min'
                           ),
-                          min_epochs=10)
+                          min_epochs=15)
         trainer.fit(model)
 
         y_hat = common_test(model, xsv)

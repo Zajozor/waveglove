@@ -1,20 +1,22 @@
 import torch
+import numpy as np
 
-from models import m1_baseline, m2_trees, m3_linear, m4_cnn, m5_lstm, m6_transformer
+from models import m1_baseline, m2_trees, m3_linear, m4_cnn, m5_lstm, m6_transformer, m7_lstm_att
 from models.utils import dataset as u_dataset, evaluate as u_test
 from models.utils.common import set_logger
 from models.utils.dataset import Dataset
 from models.utils.hparams import iter_hparams
 
+np.random.seed(42)
 torch.manual_seed(42)
 
 
 def run(model_choice, ds=Dataset.WAVEGLOVE_MULTI,
-        model_name='Some model', hp=None):
+        model_name='Some model', hp=None, prefold=None):
     if hp is None:
         hp = {}
 
-    (x_train, x_test, y_train, y_test), class_count = u_dataset.load_split_dataset(ds)
+    (x_train, x_test, y_train, y_test), class_count = u_dataset.load_split_dataset(ds, prefold)
 
     x_train, x_test = \
         model_choice.feature_extraction(x_train), model_choice.feature_extraction(x_test)
@@ -74,4 +76,4 @@ if __name__ == '__main__':
 # TODO labels k zvysnym datasetom s wsd
 
 # Just so these are not code-styled away
-t = [m1_baseline, m2_trees, m3_linear, m4_cnn, m5_lstm, m6_transformer]
+t = [m1_baseline, m2_trees, m3_linear, m4_cnn, m5_lstm, m6_transformer, m7_lstm_att]
