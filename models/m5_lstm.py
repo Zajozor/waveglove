@@ -16,7 +16,7 @@ class LSTMModel(CommonModel):
         self.n_classes = hparams['class_count']
         self.n_channels = hparams['channels']
 
-        self.pre_fc = torch.nn.Linear(hparams['temporal_length'], 60)
+        self.pre_fc = torch.nn.Linear(hparams['temporal_length'], hparams['pre_length'])
         self.lstm = torch.nn.LSTM(self.n_channels, self.n_hidden, self.n_layers, dropout=self.drop_prob,
                                   batch_first=True)
         self.fc = torch.nn.Linear(self.n_hidden, self.n_classes)
@@ -45,6 +45,7 @@ def train(x_train, y_train, class_count, *args, **kwargs):
                             'hidden_size': kwargs['hidden_size'],
                             'drop_prob': kwargs['drop_prob'],
                             'temporal_length': x_train.shape[1],
+                            'pre_length': kwargs['pre_length'],
 
                             'lr': kwargs['lr'],
                             'class_count': class_count,
