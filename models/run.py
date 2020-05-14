@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 
-from models import m1_baseline, m2_trees, m3_linear, m4_cnn, m5_lstm, m6_transformer, m7_lstm_att
+from models import m1_baseline, m2_trees, m3_linear, m4_cnn, m5_lstm, m6_transformer, m7_lstm_att, m8_deepconvlstm, m9_dclstm_att
 from models.utils import dataset as u_dataset, evaluate as u_test
 from models.utils.common import set_logger
 from models.utils.dataset import Dataset
@@ -76,4 +76,4 @@ if __name__ == '__main__':
 # TODO labels k zvysnym datasetom s wsd
 
 # Just so these are not code-styled away
-t = [m1_baseline, m2_trees, m3_linear, m4_cnn, m5_lstm, m6_transformer, m7_lstm_att]
+t = [m1_baseline, m2_trees, m3_linear, m4_cnn, m5_lstm, m6_transformer, m7_lstm_att, m8_deepconvlstm, m9_dclstm_att]

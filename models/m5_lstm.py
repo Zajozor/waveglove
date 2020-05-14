@@ -20,7 +20,6 @@ class LSTMModel(CommonModel):
         self.lstm = torch.nn.LSTM(self.n_channels, self.n_hidden, self.n_layers, dropout=self.drop_prob,
                                   batch_first=True)
         self.fc = torch.nn.Linear(self.n_hidden, self.n_classes)
-        self.dropout = torch.nn.Dropout(self.drop_prob)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = x.permute(0, 2, 1)
