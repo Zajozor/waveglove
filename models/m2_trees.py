@@ -27,7 +27,7 @@ def train(x_train, y_train, *args, **kwargs):
     classifier = BaggingClassifier(tree.DecisionTreeClassifier(),
                                    n_estimators=100,
                                    max_samples=0.5, max_features=0.5,
-                                   n_jobs=-1,
+                                   n_jobs=8,
                                    verbose=1)
     classifier.fit(x_train, y_train)
     return classifier
