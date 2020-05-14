@@ -1,11 +1,8 @@
 import torch
 
 from models.lightning_common import CommonModel, common_test, common_train
-from torch.nn import functional as F
 
 
-# Architecture based on
-# https://github.com/dspanah/Sensor-Based-Human-Activity-Recognition-LSTMsEnsemble-Pytorch/blob/master/notebooks/1.0-dsp-LSTMsEnsemle.ipynb
 class LSTMModel(CommonModel):
     def __init__(self, hparams, xst, yst, xsv, ysv):
         super().__init__(hparams, xst, yst, xsv, ysv)
@@ -22,14 +19,17 @@ class LSTMModel(CommonModel):
         self.fc = torch.nn.Linear(self.n_hidden, self.n_classes)
         self.dropout = torch.nn.Dropout(self.drop_prob)
 
+        assert self.n_hidden % 8 == 0
+        self.self_att = torch.nn.MultiheadAttention(self.n_hidden, 8)
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x, _ = self.lstm(x)
         x = self.dropout(x)
 
-        # Dot product attention
-        attention = torch.bmm(x, x[:, -1].unsqueeze(2))
-        # attention = F.softmax(attention, dim=1)
-        x = torch.bmm(attention.permute(0, 2, 1), x).squeeze(1)
+        kv = x.permute(1, 0, 2)
+        query = x[:, -1:].permute(1, 0, 2)
+        x = self.self_att(query, kv, kv)[0]
+        x = x.squeeze(0)
 
         x = self.fc(x)
         return x

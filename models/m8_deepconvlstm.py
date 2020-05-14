@@ -10,14 +10,17 @@ class LSTMModel(CommonModel):
     def __init__(self, hparams, xst, yst, xsv, ysv):
         super().__init__(hparams, xst, yst, xsv, ysv)
 
-        self.c1 = torch.nn.Conv2d(1, 64, kernel_size=(5, 1))
-        self.c2 = torch.nn.Conv2d(64, 64, kernel_size=(5, 1))
-        self.c3 = torch.nn.Conv2d(64, 64, kernel_size=(5, 1))
-        self.c4 = torch.nn.Conv2d(64, 64, kernel_size=(5, 1))
+        hidden_size = 32
+        cnn_filters = 3
 
-        self.lstm = torch.nn.LSTM(64 * hparams['channels'], 128, 2, dropout=0, batch_first=True)
+        self.c1 = torch.nn.Conv2d(1, cnn_filters, kernel_size=(5, 1))
+        self.c2 = torch.nn.Conv2d(cnn_filters, cnn_filters, kernel_size=(5, 1))
+        self.c3 = torch.nn.Conv2d(cnn_filters, cnn_filters, kernel_size=(5, 1))
+        self.c4 = torch.nn.Conv2d(cnn_filters, cnn_filters, kernel_size=(5, 1))
 
-        self.fc = torch.nn.Linear(128, hparams['class_count'])
+        self.lstm = torch.nn.LSTM(cnn_filters * hparams['channels'], hidden_size, 1, dropout=0, batch_first=True)
+
+        self.fc = torch.nn.Linear(hidden_size, hparams['class_count'])
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = x.view(x.shape[0], 1, x.shape[1], x.shape[2])

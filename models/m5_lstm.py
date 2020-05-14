@@ -3,7 +3,7 @@ import torch
 from models.lightning_common import CommonModel, common_test, common_train
 
 
-# Architecture based on
+# Architecture inspired by, but added the pre embedding layer
 # https://github.com/dspanah/Sensor-Based-Human-Activity-Recognition-LSTMsEnsemble-Pytorch/blob/master/notebooks/1.0-dsp-LSTMsEnsemle.ipynb
 class LSTMModel(CommonModel):
     def __init__(self, hparams, xst, yst, xsv, ysv):

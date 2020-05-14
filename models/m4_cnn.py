@@ -3,7 +3,7 @@ import torch
 from models.lightning_common import CommonModel, common_test, common_train
 
 
-# Architecture like, but without one maxpool,
+# Architecture like,
 # https://github.com/arturjordao/WearableSensorData/blob/master/ChenXue2015.py
 class CNNModel(CommonModel):
     def __init__(self, hparams, xst, yst, xsv, ysv):
