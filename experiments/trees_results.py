@@ -13,14 +13,10 @@ if __name__ == '__main__':
     model = m2_trees
     df = pd.DataFrame()
 
-    datasets = [Dataset.WAVEGLOVE_MULTI, Dataset.WAVEGLOVE_SINGLE, Dataset.UWAVE,
-                Dataset.PAMAP2, Dataset.SKODA, Dataset.MHEALTH,
-                Dataset.OPPORTUNITY
-                ]
-    dsnames = ['WaveGlove-multi', 'WaveGlove-single', 'uWave',
-               'PAMAP2', 'Skoda', 'MHEALTH',
-               'OPPORTUNITY',
-               ]
+    datasets = [Dataset.WAVEGLOVE_MULTI, Dataset.WAVEGLOVE_SINGLE, Dataset.UWAVE, Dataset.OPPORTUNITY,
+                Dataset.PAMAP2, Dataset.SKODA, Dataset.MHEALTH]
+    dsnames = ['WaveGlove-multi', 'WaveGlove-single', 'uWave', 'OPPORTUNITY',
+               'PAMAP2', 'Skoda', 'MHEALTH']
 
     for dataset, dsname in zip(datasets, dsnames):
         accs, recalls, f1s = [], [], []
