@@ -16,11 +16,11 @@ class LSTMModel(CommonModel):
 
         self.lstm = torch.nn.LSTM(self.n_channels, self.n_hidden, self.n_layers, dropout=self.drop_prob,
                                   batch_first=True)
-        self.fc = torch.nn.Linear(self.n_hidden, self.n_classes)
         self.dropout = torch.nn.Dropout(self.drop_prob)
 
         assert self.n_hidden % 8 == 0
         self.self_att = torch.nn.MultiheadAttention(self.n_hidden, 8)
+        self.fc = torch.nn.Linear(self.n_hidden, self.n_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x, _ = self.lstm(x)

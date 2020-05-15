@@ -10,15 +10,15 @@ class LSTMModel(CommonModel):
     def __init__(self, hparams, xst, yst, xsv, ysv):
         super().__init__(hparams, xst, yst, xsv, ysv)
 
-        hidden_size = 32
-        cnn_filters = 3
+        hidden_size = 128
+        cnn_filters = 64
 
         self.c1 = torch.nn.Conv2d(1, cnn_filters, kernel_size=(5, 1))
         self.c2 = torch.nn.Conv2d(cnn_filters, cnn_filters, kernel_size=(5, 1))
         self.c3 = torch.nn.Conv2d(cnn_filters, cnn_filters, kernel_size=(5, 1))
         self.c4 = torch.nn.Conv2d(cnn_filters, cnn_filters, kernel_size=(5, 1))
 
-        self.lstm = torch.nn.LSTM(cnn_filters * hparams['channels'], hidden_size, 1, dropout=0, batch_first=True)
+        self.lstm = torch.nn.LSTM(cnn_filters * hparams['channels'], hidden_size, 2, dropout=0, batch_first=True)
 
         self.fc = torch.nn.Linear(hidden_size, hparams['class_count'])
 

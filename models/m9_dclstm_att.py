@@ -11,7 +11,7 @@ class LSTMModel(CommonModel):
         super().__init__(hparams, xst, yst, xsv, ysv)
 
         self.hidden_size = 32
-        self.cnn_filters = 6
+        self.cnn_filters = 3
         self.lstm_layers = 1
         self.att_size = 32
         self.att_hops = 10

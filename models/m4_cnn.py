@@ -5,6 +5,7 @@ from models.lightning_common import CommonModel, common_test, common_train
 
 # Architecture like,
 # https://github.com/arturjordao/WearableSensorData/blob/master/ChenXue2015.py
+# but with added padding
 class CNNModel(CommonModel):
     def __init__(self, hparams, xst, yst, xsv, ysv):
         super().__init__(hparams, xst, yst, xsv, ysv)
