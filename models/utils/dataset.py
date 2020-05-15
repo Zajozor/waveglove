@@ -52,6 +52,13 @@ class Dataset(Enum):
     def load(dataset):
         return h5py.File(Dataset.get_path(dataset), 'r')
 
+    @staticmethod
+    def get_prefold_range(dataset):
+        with Dataset.load(dataset) as h5f:
+            if 'folds' not in h5f:
+                return [None]
+            return range(h5f['folds'].shape[0])
+
 
 def load_dataset(dataset):
     with Dataset.load(dataset) as h5f:

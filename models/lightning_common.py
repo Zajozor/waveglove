@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from models.utils.common import get_logger
 
-BATCH_SIZE = 128
+BATCH_SIZE = 64
 
 
 class CommonModel(pl.LightningModule):
@@ -83,7 +83,8 @@ def common_train(x_train, y_train, model_class, model_hparams, folds=None):
                               verbose=True,
                               mode='min'
                           ),
-                          min_epochs=15)
+                          min_epochs=25,
+                          max_epochs=500)
         trainer.fit(model)
 
         y_hat = common_test(model, xsv)

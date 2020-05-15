@@ -13,10 +13,14 @@ if __name__ == '__main__':
     model = m2_trees
     df = pd.DataFrame()
 
-    datasets = [Dataset.WAVEGLOVE_MULTI, Dataset.WAVEGLOVE_SINGLE, Dataset.UWAVE, Dataset.OPPORTUNITY, Dataset.PAMAP2,
-                Dataset.SKODA, Dataset.MHEALTH]
-    dsnames = ['WaveGlove-multi', 'WaveGlove-single', 'uWave', 'OPPORTUNITY', 'PAMAP2',
-               'Skoda', 'MHEALTH']
+    datasets = [Dataset.WAVEGLOVE_MULTI, Dataset.WAVEGLOVE_SINGLE, Dataset.UWAVE,
+                Dataset.PAMAP2, Dataset.SKODA, Dataset.MHEALTH,
+                Dataset.OPPORTUNITY
+                ]
+    dsnames = ['WaveGlove-multi', 'WaveGlove-single', 'uWave',
+               'PAMAP2', 'Skoda', 'MHEALTH',
+               'OPPORTUNITY',
+               ]
 
     for dataset, dsname in zip(datasets, dsnames):
         accs, recalls, f1s = [], [], []
@@ -41,6 +45,7 @@ if __name__ == '__main__':
                        ignore_index=True)
         df = df.append({'Metric value': f1s, 'Evaluation metric': 'Macro F1 score', 'Dataset': dsname},
                        ignore_index=True)
+        df.to_csv('../plots/results_trees_df.csv', index=False)
 
     df = df.explode('Metric value')
 
@@ -48,6 +53,8 @@ if __name__ == '__main__':
     sns.boxplot(y='Metric value', x='Dataset', hue='Evaluation metric', data=df, ax=ax)
     plt.subplots_adjust(left=0.05, right=0.99, top=1)
     ax.legend(loc='lower left')
+    fig.savefig('../plots/results_trees.png')
+
     df.to_csv('../plots/results_trees_df.csv', index=False)
     for i, dsname in enumerate(dsnames):
         print(dsname, ':', 'Acc',
@@ -58,5 +65,4 @@ if __name__ == '__main__':
               f"{df[(df['Dataset'] == dsname) & (df['Evaluation metric'] == 'Macro F1 score')]['Metric value'].mean():.3f}"
               )
 
-    fig.savefig('../plots/results_trees.png')
     fig.show()
