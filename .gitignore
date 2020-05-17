@@ -1,2 +1,6 @@
 .idea
 run*.sh
+Sensor-Based-Human*
+plot*.png
+plots/*.png
+experiments/*.log
