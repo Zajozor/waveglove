@@ -71,6 +71,7 @@ class TransformerModel(CommonModel):
 
     def forward(self, x, has_mask=True):
         x = self.sensor_expansion(x)
+        x = x + torch.tanh(x)
 
         x = x.permute(1, 0, 2)
         x = self.pos_encoder(x)

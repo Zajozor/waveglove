@@ -72,7 +72,7 @@ def load_dataset(dataset):
     return x, y, class_count
 
 
-def load_split_dataset(dataset, prefold, random_state=42):
+def load_split_dataset(dataset, prefold, random_state=42, test_size=0.15):
     x, y, class_count = load_dataset(dataset)
 
     if prefold is not None:
@@ -80,4 +80,4 @@ def load_split_dataset(dataset, prefold, random_state=42):
             fold = h5f['folds'][prefold]
             return (x[fold == 1], x[fold == 0], y[fold == 1], y[fold == 0]), class_count
     # Order of return values is: x_train, x_test, y_train, y_test
-    return train_test_split(x, y, test_size=0.15, random_state=random_state), class_count
+    return train_test_split(x, y, test_size=test_size, random_state=random_state), class_count
