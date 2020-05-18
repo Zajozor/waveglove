@@ -5,7 +5,7 @@ from sklearn.preprocessing import normalize
 
 
 def plot_confusion_matrix(matrix, annot=None, title=None, ax=None, norm_row=True, fmt='d',
-                          xlabel=None, ylabel=None):
+                          xlabel=None, ylabel=None, cbar=True):
     if norm_row:
         matrix = normalize(matrix, axis=1, norm='l1')
         fmt = '.2f'
@@ -19,7 +19,7 @@ def plot_confusion_matrix(matrix, annot=None, title=None, ax=None, norm_row=True
     if title:
         ax.set_title(title)
 
-    sns.heatmap(matrix, ax=ax, annot=annot, fmt=fmt, cmap='Blues')
+    sns.heatmap(matrix, ax=ax, annot=annot, fmt=fmt, cmap='Blues', cbar=cbar)
     ax.set_xlabel('Prediction' if xlabel is None else xlabel)
     ax.set_ylabel('Truth' if ylabel is None else ylabel)
 
