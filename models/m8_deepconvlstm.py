@@ -37,10 +37,6 @@ class LSTMModel(CommonModel):
         return x
 
 
-def feature_extraction(xs):
-    return xs
-
-
 def train(x_train, y_train, class_count, *args, **kwargs):
     return common_train(x_train, y_train, LSTMModel,
                         {

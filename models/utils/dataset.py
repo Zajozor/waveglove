@@ -8,41 +8,19 @@ from models.utils.common import DATA_ROOT
 
 
 class Dataset(Enum):
-    WAVEGLOVE_MULTI = 'waveglove_multi'
-    WAVEGLOVE_SINGLE = 'waveglove_single'
-    UWAVE = 'uwave'
-    OPPORTUNITY = 'opportunity'
-    PAMAP2 = 'pamap2'
-    SKODA = 'skoda'
-    MHEALTH = 'mhealth'
+    J_LOSO_MHEALTH = 'LOSO_MHEALTH'
+    J_LOSO_USCHAD = 'LOSO_USCHAD'
+    J_LOSO_UTD_MHAD1_1s = 'LOSO_UTD-MHAD1_1s'
+    J_LOSO_UTD_MHAD2_1s = 'LOSO_UTD-MHAD2_1s'
+    J_LOSO_WHARF = 'LOSO_WHARF'
+    J_LOSO_WISDM = 'LOSO_WISDM'
 
-    J_FNOW_MHEALTH = 'jordao_etal/FNOW_MHEALTH'
-    J_FNOW_USCHAD = 'jordao_etal/FNOW_USCHAD'
-    J_FNOW_UTD_MHAD1_1s = 'jordao_etal/FNOW_UTD-MHAD1_1s'
-    J_FNOW_UTD_MHAD2_1s = 'jordao_etal/FNOW_UTD-MHAD2_1s'
-    J_FNOW_WHARF = 'jordao_etal/FNOW_WHARF'
-    J_FNOW_WISDM = 'jordao_etal/FNOW_WISDM'
-
-    J_LOSO_MHEALTH = 'jordao_etal/LOSO_MHEALTH'
-    J_LOSO_USCHAD = 'jordao_etal/LOSO_USCHAD'
-    J_LOSO_UTD_MHAD1_1s = 'jordao_etal/LOSO_UTD-MHAD1_1s'
-    J_LOSO_UTD_MHAD2_1s = 'jordao_etal/LOSO_UTD-MHAD2_1s'
-    J_LOSO_WHARF = 'jordao_etal/LOSO_WHARF'
-    J_LOSO_WISDM = 'jordao_etal/LOSO_WISDM'
-
-    J_LOTO_MHEALTH = 'jordao_etal/LOTO_MHEALTH'
-    J_LOTO_USCHAD = 'jordao_etal/LOTO_USCHAD'
-    J_LOTO_UTD_MHAD1_1s = 'jordao_etal/LOTO_UTD-MHAD1_1s'
-    J_LOTO_UTD_MHAD2_1s = 'jordao_etal/LOTO_UTD-MHAD2_1s'
-    J_LOTO_WHARF = 'jordao_etal/LOTO_WHARF'
-    J_LOTO_WISDM = 'jordao_etal/LOTO_WISDM'
-
-    J_SNOW_MHEALTH = 'jordao_etal/SNOW_MHEALTH'
-    J_SNOW_USCHAD = 'jordao_etal/SNOW_USCHAD'
-    J_SNOW_UTD_MHAD1_1s = 'jordao_etal/SNOW_UTD-MHAD1_1s'
-    J_SNOW_UTD_MHAD2_1s = 'jordao_etal/SNOW_UTD-MHAD2_1s'
-    J_SNOW_WHARF = 'jordao_etal/SNOW_WHARF'
-    J_SNOW_WISDM = 'jordao_etal/SNOW_WISDM'
+    J_LOTO_MHEALTH = 'LOTO_MHEALTH'
+    J_LOTO_USCHAD = 'LOTO_USCHAD'
+    J_LOTO_UTD_MHAD1_1s = 'LOTO_UTD-MHAD1_1s'
+    J_LOTO_UTD_MHAD2_1s = 'LOTO_UTD-MHAD2_1s'
+    J_LOTO_WHARF = 'LOTO_WHARF'
+    J_LOTO_WISDM = 'LOTO_WISDM'
 
     @staticmethod
     def get_path(dataset):

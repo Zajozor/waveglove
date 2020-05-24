@@ -3,6 +3,7 @@ import torch
 from models.lightning_common import CommonModel, common_test, common_train
 from torch.nn import functional as F
 
+
 # Architecture based on
 # Singh et al.
 # https://github.com/isukrit/encodingHumanActivity/blob/master/codes/model_proposed/model_with_self_attn.py
@@ -48,10 +49,6 @@ class LSTMModel(CommonModel):
 
         x = self.fc(embedding_matrix)
         return x
-
-
-def feature_extraction(xs):
-    return xs
 
 
 def train(x_train, y_train, class_count, *args, **kwargs):

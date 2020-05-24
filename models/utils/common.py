@@ -13,8 +13,8 @@ DATA_ROOTS = {
 DATA_ROOT = DATA_ROOTS[hostname]
 
 TENSORBOARD_ROOTS = {
-    'zor-empowered.local': '/Users/zajozor/Code/school/waveglove/tensorboard',
-    'naiveneuron-s1': '/ext/zajo/tensorboard',
+    'zor-empowered.local': '/Users/zajozor/Code/school/waveglove-ml23/tensorboard',
+    'naiveneuron-s1': '/ext/zajo/tensorboard-ml23',
 }
 TENSORBOARD_ROOT = TENSORBOARD_ROOTS[hostname]
 

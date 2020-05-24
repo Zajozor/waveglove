@@ -111,5 +111,3 @@ dependencies:
     - tqdm==4.43.0
     - unrar==0.4
     - urllib3==1.25.8
-prefix: /usr/local/anaconda3/envs/gesture
-
