@@ -1,6 +1,14 @@
 # WaveGlove
 
-Implementation of various CML and DL methods for HAR data classification.
+All the used datasets are available on Zenodo:
+
+Králik, Matej. (2020). Curated list of HAR datasets (Version 1) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.3831958
+
+This repository contains the implementation of various Classical Machine Learning (CML) and Deep Learing (DL) methods for
+Human Activity recognition (HAR) classification.
+The code uses the SciPy and PyTorch frameworks.
+
+---
 
 Repository structure:
 
@@ -11,6 +19,9 @@ Repository structure:
 - [environment.yml](environment.yml) defines a conda environment used to run the application
 
 Results from the original work
-were by defining respective models,
+were produced using the respective models,
 hyperparameter combinations
-and datasets in [models/run.py](models/run.py).
+and datasets present in [models/run.py](models/run.py).
+
+Running the code requires downloading the datasets and adjusting the relevant
+configuration variables locally.
