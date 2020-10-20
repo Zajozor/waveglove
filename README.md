@@ -10,7 +10,12 @@ The code uses the SciPy and PyTorch frameworks.
 
 ---
 
-Repository structure:
+The original thesis, containing the full description of the work, as well as the **complete set of results**,
+[is available in this repository](multi-sensor-accelerometer-based-gesture-recognition.pdf).
+
+---
+
+Structure of the code in the repository:
 
 - [experiments](experiments) - helper scripts for smaller experiments
 - [models](models) - model definitions and running code
